@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Progress & Deadline Alert System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <!-- Application Header -->
+        <header class="app-header">
+            <h1>Task Progress &amp; Deadline Alert System</h1>
+            <p class="subtitle">JavaScript Laboratory Project &bull; Real-Time Task &amp; Work Unit Tracker</p>
+        </header>
+
+        <!-- Main Content Grid -->
+        <main class="main-content">
+            
+            <!-- SECTION 1: Task Creation Form -->
+            <section class="card" id="task-creation-card">
+                <h2>1. Create New Task</h2>
+                <form id="task-form">
+                    
+                    <!-- Task Name Input -->
+                    <div class="form-group">
+                        <label for="task-name-input">Task Name:</label>
+                        <input 
+                            type="text" 
+                            id="task-name-input" 
+                            placeholder="e.g., Complete JavaScript Assignment" 
+                            required
+                        >
+                    </div>
+
+                    <!-- Deadline Input in Minutes -->
+                    <div class="form-group">
+                        <label for="deadline-input">Deadline (in Minutes):</label>
+                        <div class="deadline-input-wrapper">
+                            <input 
+                                type="number" 
+                                id="deadline-input" 
+                                min="1" 
+                                max="120" 
+                                step="1" 
+                                value="3" 
+                                required
+                            >
+                            <span class="unit-label">min</span>
+                        </div>
+                        <!-- Quick Select Buttons for Lab Demo -->
+                        <div class="quick-preset-container">
+                            <span class="preset-label">Quick Lab Presets:</span>
+                            <button type="button" class="btn btn-preset" data-min="1">1 Min</button>
+                            <button type="button" class="btn btn-preset" data-min="2">2 Min</button>
+                            <button type="button" class="btn btn-preset" data-min="3">3 Min</button>
+                            <button type="button" class="btn btn-preset" data-min="5">5 Min</button>
+                        </div>
+                    </div>
+
+                    <!-- Work Units / Subtasks Setup -->
+                    <div class="form-group">
+                        <label for="work-unit-input">Work Units (Subtasks):</label>
+                        <div class="input-with-button">
+                            <input 
+                                type="text" 
+                                id="work-unit-input" 
+                                placeholder="e.g., 1. Create HTML structure"
+                            >
+                            <button type="button" id="add-unit-btn" class="btn btn-secondary">+ Add Unit</button>
+                        </div>
+                    </div>
+
+                    <!-- Preview List of Staged Work Units -->
+                    <div class="staged-units-container">
+                        <div class="staged-units-header">
+                            <label>Configured Work Units (<span id="staged-count">0</span>):</label>
+                            <button type="button" id="load-sample-btn" class="btn-link">Load Demo Sample</button>
+                        </div>
+                        <ul id="staged-units-list" class="staged-list">
+                            <li class="empty-hint">No work units added yet. Add at least one unit above or click "Load Demo Sample".</li>
+                        </ul>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="form-actions">
+                        <button type="submit" id="create-task-btn" class="btn btn-primary">
+                            Create Task &amp; Start Timer
+                        </button>
+                    </div>
+
+                </form>
+            </section>
+
+            <!-- SECTION 2: Active Task Live Tracking Dashboard -->
+            <section class="card" id="task-monitor-card">
+                <div class="monitor-header">
+                    <h2>2. Live Task Monitor</h2>
+                    <span id="system-status-badge" class="badge badge-neutral">Awaiting Task</span>
+                </div>
+
+                <!-- Placeholder when no task is active -->
+                <div id="no-task-placeholder" class="placeholder-state">
+                    <p>No task is currently running. Please fill out the form on the left and click <strong>"Create Task &amp; Start Timer"</strong>.</p>
+                </div>
+
+                <!-- Active Task Tracking Panel -->
+                <div id="active-task-panel" class="active-task-panel hidden">
+                    
+                    <!-- Task Title and Deadline Summary -->
+                    <div class="task-info-bar">
+                        <div>
+                            <span class="info-label">Active Task:</span>
+                            <h3 id="display-task-name">-</h3>
+                        </div>
+                        <div class="time-block">
+                            <span class="info-label">Time Remaining:</span>
+                            <div id="countdown-timer" class="timer-display">00:00</div>
+                        </div>
+                    </div>
+
+                    <!-- Status Notification & Alert Banners -->
+                    <div id="alert-box" class="alert-box hidden">
+                        <!-- Dynamic warning / completion / failure message will be injected here -->
+                    </div>
+
+                    <!-- Progress Section -->
+                    <div class="progress-section">
+                        <div class="progress-labels">
+                            <span class="progress-title">Overall Progress</span>
+                            <span id="progress-percent-text" class="progress-value">0%</span>
+                        </div>
+                        
+                        <!-- Horizontal Progress Bar -->
+                        <div class="progress-bar-container">
+                            <div id="progress-bar-fill" class="progress-bar-fill progress-red" style="width: 0%;"></div>
+                        </div>
+                        
+                        <div class="progress-summary">
+                            <span id="completed-units-count">0 of 0</span> work units completed
+                        </div>
+                    </div>
+
+                    <!-- Work Units Live Checklist -->
+                    <div class="checklist-section">
+                        <h4>Work Units Checklist:</h4>
+                        <p class="checklist-instruction">Click on a work unit or the "Mark as Completed" button as you complete each step:</p>
+                        <ul id="live-units-list" class="checklist">
+                            <!-- Injected dynamically via script.js -->
+                        </ul>
+                    </div>
+
+                    <!-- Reset / New Task Button -->
+                    <div class="monitor-actions">
+                        <button type="button" id="reset-task-btn" class="btn btn-outline">
+                            &larr; Reset / Create Another Task
+                        </button>
+                    </div>
+
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Application Footer -->
+        <footer class="app-footer">
+            <p>JavaScript Lab Demonstration &bull; Real-time setInterval Timer &amp; DOM Manipulation</p>
+        </footer>
+    </div>
+
+    <!-- Application Logic Script -->
+    <script src="script.js"></script>
+</body>
+</html>
